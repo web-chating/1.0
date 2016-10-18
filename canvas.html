@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        html{
+            perspective: 900px;
+        }
+        label{
+            cursor: pointer;
+        }
+        canvas{
+            cursor: pointer;
+        }
+        #inp{
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+        #rotade{
+            width: 600px;
+            height: 600px;
+            position: relative;
+            margin: 20px auto;
+            /*  animation:move 2s infinite linear;  */
+            transform-style: preserve-3d;
+            transform-origin:center center -300px;
+        }
+        @keyframes move{
+            from {transform: rotateX(0deg) rotateY(0deg);}
+            to {transform: rotateX(360deg) rotateY(360deg);}
+        }
+        span{
+            position: absolute;
+            top:0;
+            left:0;
+            width: 600px;
+            height: 600px;
+            display: block;
+            opacity: 0.9;
+        }
+        span:nth-child(1){
+            background: #f00;
+        }
+        span:nth-child(2){
+            background: #00f;
+            transform: rotateX(-90deg);
+            transform-origin:top left;
+        }
+        span:nth-child(3){
+            background: #0f0;
+            transform: rotateX(90deg);
+            transform-origin:bottom left;
+        }
+        span:nth-child(4){
+            background: #ff0;
+            transform: translate3d(0,0,-600px);
+            transform-origin:top left;
+        }
+        span:nth-child(5){
+            background: #0ff;
+            transform: rotateY(90deg);
+            transform-origin:top left;
+        }
+        span:nth-child(6){
+            background: #99f;
+            transform: rotateY(-90deg);
+            transform-origin:top right;
+        }
+        #canvas1{
+            display: block;
+            margin: 0 auto;
+        }
+        #canvas2{
+            display: block;
+            margin: 0 auto;
+        }
+        #canvas3{
+            display: block;
+            margin: 0 auto;
+        }
+        #canvas4{
+            display: block;
+            margin: 0 auto;
+        }
+        #canvas5{
+            display: block;
+            margin: 0 auto;
+        }
+        #canvas6{
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+<div id="rotade" style="transform:rotateX(-30deg) rotateY(45deg);">
+    <span>
+        <canvas id="canvas1" width="600" height="600">
+        您的浏览器版本过低
+        </canvas>
+    </span>
+    <span>
+        <canvas id="canvas2" width="600" height="600">
+            您的浏览器版本过低
+        </canvas>
+    </span>
+    <span>
+        <canvas id="canvas3" width="600" height="600">
+            您的浏览器版本过低
+        </canvas>
+    </span>
+    <span>
+        <canvas id="canvas4" width="600" height="600">
+            您的浏览器版本过低
+        </canvas>
+    </span>
+    <span>
+        <canvas id="canvas5" width="600" height="600">
+            您的浏览器版本过低
+        </canvas>
+    </span>
+    <span>
+        <canvas id="canvas6" width="600" height="600">
+            您的浏览器版本过低
+        </canvas>
+    </span>
+</div>
+<div id="inp">
+    <label><input type="radio" name="a" id="1">双线</label>
+    <label><input type="radio" name="a" id="2">横线</label>
+    <label><input type="radio" name="a" id="3">黑线</label>
+    <label><input type="radio" name="a" id="4">白线</label>
+    <label><input type="radio" name="a" id="5">彩线</label>
+    <label><input type="radio" name="a" id="6">彩环</label>
+    <label><input type="radio" name="a" id="7">圆环</label>
+    <label><input type="radio" name="a" id="8" checked>旋转</label>
+</div>
+<script>
+    var rotade=document.getElementById('rotade');
+    var che=document.getElementsByTagName('input');
+    var checked=1;
+    for(var i=1;i<=6;i++){
+        document.getElementById('canvas'+i).index=i;
+    }
+    for(var i=0;i<che.length;i++){
+        che[i].onclick=function(){
+            if(this.id!='8'){
+                window.onmousedown=null;
+                window.onmousemove=null;
+                window.onmouseup=null;
+            };
+            switch (this.id){
+                case "1":
+                    for(var i=1;i<=6;i++){
+                        document.getElementById('canvas'+i).onmousedown=function(e){
+                            var e=e||window.event;
+                            var start=[e.offsetX, e.offsetY];
+                            var move=[];
+                            document.getElementById('canvas'+this.index).onmousemove=function(e){
+                                var e=e||window.event;
+                                move.push([e.offsetX, e.offsetY]);
+                                if(move.length>=5){
+                                    document.getElementById('canvas'+this.index).getContext('2d').beginPath();
+                                    document.getElementById('canvas'+this.index).getContext('2d').moveTo(start[0],start[1]);
+                                    for(var j=0;j<move.length;j++){
+                                        document.getElementById('canvas'+this.index).getContext('2d').lineTo(move[j][0],move[j][1])
+                                    }
+                                    document.getElementById('canvas'+this.index).getContext('2d').strokeStyle="#000";
+                                    document.getElementById('canvas'+this.index).getContext('2d').fillStyle="#03ccbb";
+                                    document.getElementById('canvas'+this.index).getContext('2d').lineWidth=2;
+                                    document.getElementById('canvas'+this.index).getContext('2d').fill();
+                                    document.getElementById('canvas'+this.index).getContext('2d').stroke();
+                                    document.getElementById('canvas'+this.index).getContext('2d').closePath();
+                                    move=[];
+                                }
+                            };
+                            document.getElementById('canvas'+this.index).onmouseup=function(){
+                                document.getElementById('canvas'+this.index).onmousemove=null;
+                            }
+                        };
+                    };
+                    break;
+                case '2':
+                for(var i=1;i<=6;i++){
+                    document.getElementById('canvas'+i).onmousedown=function(){
+                        var move=[];
+                        document.getElementById('canvas'+this.index).onmousemove=function(e){
+                            var e=e||window.event;
+                            move.push([e.offsetX, e.offsetY]);
+                            if(move.length>=2){
+                                document.getElementById('canvas'+this.index).getContext('2d').beginPath();
+                                document.getElementById('canvas'+this.index).getContext('2d').moveTo(move[0][0],move[0][1]);
+                                document.getElementById('canvas'+this.index).getContext('2d').lineTo(move[1][0],move[1][1]);
+                                document.getElementById('canvas'+this.index).getContext('2d').strokeStyle='rgb('+parseInt(Math.random()*255)+','+parseInt(Math.random()*255)+','+parseInt(Math.random()*255)+')';
+                                document.getElementById('canvas'+this.index).getContext('2d').lineWidth=50;
+                                document.getElementById('canvas'+this.index).getContext('2d').stroke();
+                                document.getElementById('canvas'+this.index).getContext('2d').closePath();
+                                move=[];
+                            }
+                        };
+                        document.getElementById('canvas'+this.index).onmouseup=function(){
+                            document.getElementById('canvas'+this.index).onmousemove=null;
+                        }
+                    };
+                }break;
+                case '3':
+                for(var i=1;i<=6;i++){
+                    document.getElementById('canvas'+i).onmousedown=function(){
+                        var move=[];
+                        document.getElementById('canvas'+this.index).onmousemove=function(e){
+                            var e=e||window.event;
+                            move.push([e.offsetX, e.offsetY]);
+                            if(move.length>=3){
+                                document.getElementById('canvas'+this.index).getContext('2d').beginPath();
+                                document.getElementById('canvas'+this.index).getContext('2d').moveTo(move[0][0],move[0][1]);
+                                document.getElementById('canvas'+this.index).getContext('2d').lineTo(move[1][0],move[1][1]);
+                                document.getElementById('canvas'+this.index).getContext('2d').lineTo(move[2][0],move[2][1]);
+                                document.getElementById('canvas'+this.index).getContext('2d').strokeStyle="#000";
+                                document.getElementById('canvas'+this.index).getContext('2d').lineWidth=5;
+                                document.getElementById('canvas'+this.index).getContext('2d').stroke();
+                                document.getElementById('canvas'+this.index).getContext('2d').closePath();
+                                move=[[move[2][0],move[2][1]]]
+                            }
+                        };
+                        document.getElementById('canvas'+this.index).onmouseup=function(){
+                            document.getElementById('canvas'+this.index).onmousemove=null;
+                        }
+                    };
+                }break;
+                case '4':
+                for(var i=1;i<=6;i++){
+                    document.getElementById('canvas'+i).onmousedown=function(){
+                        var move=[];
+                        document.getElementById('canvas'+this.index).onmousemove=function(e){
+                            var e=e||window.event;
+                            move.push([e.offsetX, e.offsetY]);
+                            if(move.length>=3){
+                                document.getElementById('canvas'+this.index).getContext('2d').beginPath();
+                                document.getElementById('canvas'+this.index).getContext('2d').moveTo(move[0][0],move[0][1]);
+                                document.getElementById('canvas'+this.index).getContext('2d').lineTo(move[1][0],move[1][1]);
+                                document.getElementById('canvas'+this.index).getContext('2d').lineTo(move[2][0],move[2][1]);
+                                document.getElementById('canvas'+this.index).getContext('2d').strokeStyle="#fff";
+                                document.getElementById('canvas'+this.index).getContext('2d').lineWidth=10;
+                                document.getElementById('canvas'+this.index).getContext('2d').stroke();
+                                document.getElementById('canvas'+this.index).getContext('2d').closePath();
+                                move=[[move[2][0],move[2][1]]]
+                            }
+                        };
+                        document.getElementById('canvas'+this.index).onmouseup=function(){
+                            document.getElementById('canvas'+this.index).onmousemove=null;
+                        }
+                    };
+                }break;
+                case '5':
+                for(var i=1;i<=6;i++){
+                    document.getElementById('canvas'+i).onmousedown=function(){
+                        var move=[];
+                        document.getElementById('canvas'+this.index).onmousemove=function(e){
+                            var e=e||window.event;
+                            move.push([e.offsetX, e.offsetY]);
+                            if(move.length==2){
+                                document.getElementById('canvas'+this.index).getContext('2d').beginPath();
+                                document.getElementById('canvas'+this.index).getContext('2d').moveTo(move[0][0],move[0][1]);
+                                document.getElementById('canvas'+this.index).getContext('2d').lineTo(move[1][0],move[1][1]);
+                                document.getElementById('canvas'+this.index).getContext('2d').strokeStyle='rgb('+parseInt(Math.random()*255)+','+parseInt(Math.random()*255)+','+parseInt(Math.random()*255)+')';
+                                document.getElementById('canvas'+this.index).getContext('2d').lineWidth=10;
+                                document.getElementById('canvas'+this.index).getContext('2d').stroke();
+                                document.getElementById('canvas'+this.index).getContext('2d').closePath();
+                                move=[[move[1][0],move[1][1]]]
+                            }
+                        };
+                        document.getElementById('canvas'+this.index).onmouseup=function(){
+                            document.getElementById('canvas'+this.index).onmousemove=null;
+                        }
+                    };
+                }break;
+                case '6':
+                for(var i=1;i<=6;i++){
+                    document.getElementById('canvas'+i).onmousedown=function(e){
+                        var e=e||window.event;
+                        var start=[e.offsetX, e.offsetY];
+                        document.getElementById('canvas'+this.index).onmousemove=function(e){
+                            var e=e||window.event;
+                            var end=[e.offsetX, e.offsetY];
+                            var r=Math.sqrt(Math.pow((end[0]-start[0]),2)+Math.pow((end[1]-start[1]),2));
+                            document.getElementById('canvas'+this.index).getContext('2d').beginPath();
+                            document.getElementById('canvas'+this.index).getContext('2d').moveTo(start[0]+r,start[1]);
+                            document.getElementById('canvas'+this.index).getContext('2d').arc(start[0],start[1],r,0,Math.PI*2,true);
+                            document.getElementById('canvas'+this.index).getContext('2d').lineWidth=3;
+                            document.getElementById('canvas'+this.index).getContext('2d').strokeStyle='rgb('+parseInt(Math.random()*255)+','+parseInt(Math.random()*255)+','+parseInt(Math.random()*255)+')';
+                            document.getElementById('canvas'+this.index).getContext('2d').stroke();
+                            document.getElementById('canvas'+this.index).getContext('2d').closePath();
+                        };
+                        document.getElementById('canvas'+this.index).onmouseup=function(e){
+                            document.getElementById('canvas'+this.index).onmousemove=null;
+                        };
+
+                    };
+                }break;
+                case '7':
+                for(var i=1;i<=6;i++){
+                    document.getElementById('canvas'+i).onmousedown=function(e){
+                        var e=e||window.event;
+                        var start=[e.offsetX, e.offsetY];
+                        var arr=[];
+                        document.getElementById('canvas'+this.index).onmousemove=function(e){
+                            var e=e||window.event;
+                            arr.push([e.offsetX, e.offsetY]);
+                            if(arr.length==2){
+                                var r1=Math.sqrt(Math.pow((arr[0][0]-start[0]),2)+Math.pow((arr[0][1]-start[1]),2));
+                                document.getElementById('canvas'+this.index).getContext('2d').beginPath();
+                                document.getElementById('canvas'+this.index).getContext('2d').moveTo(start[0]+r1,start[1]);
+                                document.getElementById('canvas'+this.index).getContext('2d').arc(start[0],start[1],r1,0,Math.PI*2,true);
+                                document.getElementById('canvas'+this.index).getContext('2d').lineWidth=5;
+                                document.getElementById('canvas'+this.index).getContext('2d').strokeStyle='rgba(255,0,255,1)';
+                                document.getElementById('canvas'+this.index).getContext('2d').stroke();
+                                document.getElementById('canvas'+this.index).getContext('2d').closePath();
+                                var r2=Math.sqrt(Math.pow((arr[1][0]-start[0]),2)+Math.pow((arr[1][1]-start[1]),2));
+                                document.getElementById('canvas'+this.index).getContext('2d').beginPath();
+                                document.getElementById('canvas'+this.index).getContext('2d').moveTo(start[0]+r2,start[1]);
+                                document.getElementById('canvas'+this.index).getContext('2d').arc(start[0],start[1],r2,0,Math.PI*2,true);
+                                document.getElementById('canvas'+this.index).getContext('2d').lineWidth=5;
+                                document.getElementById('canvas'+this.index).getContext('2d').strokeStyle='rgba(0,0,0,1)';
+                                document.getElementById('canvas'+this.index).getContext('2d').stroke();
+                                document.getElementById('canvas'+this.index).getContext('2d').closePath();
+                                arr.shift();
+                            }
+                        };
+                        document.getElementById('canvas'+this.index).onmouseup=function(){
+                            document.getElementById('canvas'+this.index).onmousemove=null;
+                        }
+                    };
+                }break;
+                case '8':
+                for(var i=1;i<=6;i++){
+                    var can=document.getElementById('canvas'+i);
+                    var ctx=can.getContext('2d');
+                    can.onmousedown=null;
+                    can.onmousemove=null;
+                    can.onmouseup=null;
+                };
+                window.onmousedown=function(e){
+                    var e=e||window.event;
+                    e.preventDefault();
+                    var X=e.clientX;
+                    var Y=e.clientY;
+                    var RotX=rotade.style.transform.split('(')[1].split('deg')[0];
+                    var RotY=rotade.style.transform.split('(')[2].split('deg')[0];
+                    window.onmousemove=function(e){
+                        var e=e||window.event;
+                        rotade.style.transform='rotateX('+(RotX*1-e.clientY+Y)+'deg) rotateY('+(RotY*1+e.clientX-X)+'deg)';
+                    }
+                };
+                window.onmouseup=function(e){
+                    window.onmousemove=null;
+                };break;
+            }
+        }
+    }
+    window.onmousedown=function(e){
+        var e=e||window.event;
+        e.preventDefault();
+        var X=e.clientX;
+        var Y=e.clientY;
+        var RotX=rotade.style.transform.split('(')[1].split('deg')[0];
+        var RotY=rotade.style.transform.split('(')[2].split('deg')[0];
+        window.onmousemove=function(e){
+            var e=e||window.event;
+            rotade.style.transform='rotateX('+(RotX*1-e.clientY+Y)+'deg) rotateY('+(RotY*1+e.clientX-X)+'deg)';
+        }
+    };
+    window.onmouseup=function(e){
+        window.onmousemove=null;
+    };
+</script>
+</body>
+</html># 1.0
